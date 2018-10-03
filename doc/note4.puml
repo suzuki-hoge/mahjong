@@ -1,0 +1,26 @@
+@startuml
+
+class HandTiles
+
+class HandTilesToituFixed {
+  + {static} [HandTilesToituFixed] fixAll(HandTiles)
+  + <NormalGrouping> fixMaybe()
+}
+
+interface Grouping
+
+class TitoituGrouping {
+  {static} <TitoituGrouping> fixMaybe(HandTiles)
+}
+
+class NormalGrouping
+
+HandTiles -r-> Grouping
+TitoituGrouping -d-|> Grouping
+NormalGrouping -u-|> Grouping
+
+HandTilesToituFixed -u-> HandTiles
+HandTilesToituFixed -r-> "0..1" NormalGrouping
+TitoituGrouping --> HandTiles
+
+@enduml

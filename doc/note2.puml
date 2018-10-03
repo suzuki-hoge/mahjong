@@ -1,0 +1,33 @@
+@startuml
+
+class HandTiles {
+  [Hand] judge() {\n  if groupings is empty, return []\n  else return grouping's hands that points biggest\n}
+}
+
+enum Hand {
+  - int
+  Titoitu(2)
+  TanYao(1)
+}
+
+interface Grouping {
+  + [Hand] judge()
+  + int totalPoints()
+}
+
+class TitoituGrouping {
+  + [Hand] judge() {\n  return [Titoitu]\n}
+}
+
+class NormalGrouping {
+  - [Tile] all
+  - GroupedTiles g1, g2, g3, g4
+  + [Hand] judge() {\n  write main logic\n}
+}
+
+TitoituGrouping -u-|> Grouping
+NormalGrouping -u-|> Grouping
+Grouping -r-> Hand
+HandTiles -r-> "*" Grouping
+
+@enduml

@@ -1,0 +1,78 @@
+@startuml
+
+interface GroupedHandTiles
+
+enum Hand
+
+TitoituHandTiles -u-|> GroupedHandTiles
+NormalHandTiles -u-|> GroupedHandTiles
+
+package matcher {
+  class NormalHandTilesMatchers {
+    + {static} [Hand] applyAll(NormalHandTiles)
+    - {static} [NormalHandTiles -> <Hand>] matchers
+  }
+
+  class IkkituukanMatcher {
+    + NormalHandTiles -> <Hand> matcher
+  }
+
+  class IpeikoMatcher {
+    + NormalHandTiles -> <Hand> matcher
+  }
+
+  NormalHandTilesMatchers --> IkkituukanMatcher
+  NormalHandTilesMatchers --> IpeikoMatcher
+
+  class AllTilesMatchers {
+    + {static} [Hand] applyAll(AllTiles)
+    - {static} [AllTiles -> <Hand>] matchers
+  }
+
+  class TanyaoMatcher {
+    + AllTiles -> <Hand> matcher
+  }
+
+  class HonituMatcher {
+    + AllTiles -> <Hand> matcher
+  }
+
+  class TinituMatcher {
+    + AllTiles -> <Hand> matcher
+  }
+
+  AllTilesMatchers --> TanyaoMatcher
+  AllTilesMatchers --> HonituMatcher
+  AllTilesMatchers --> TinituMatcher
+  TanyaoMatcher -[hidden]r-> HonituMatcher
+  HonituMatcher -[hidden]r-> TinituMatcher
+
+  NormalHandTiles --> AllTilesMatchers
+  NormalHandTiles --> NormalHandTilesMatchers
+
+  TitoituHandTiles --> AllTilesMatchers
+
+  GroupedHandTiles -r-> "*" Hand
+
+  class AllTilesMatcher {
+    + new(AllTiles)
+    + bool isMatch(AllTiles -> bool)
+    + bool no(Tile -> bool)
+    + bool any(Tile -> bool)
+    + bool uniqueColor()
+  }
+
+  class NormalHandTilesMatcher {
+    + new(NormalHandTiles)
+    + bool isMatch([Shuntu], [RankKoutu], [CharKoutu], <RankToitu>, <CharToitu> -> bool)
+  }
+
+  IkkituukanMatcher --> NormalHandTilesMatcher
+  IpeikoMatcher --> NormalHandTilesMatcher
+  TinituMatcher --> AllTilesMatcher
+  HonituMatcher --> AllTilesMatcher
+  TanyaoMatcher --> AllTilesMatcher
+  HonituMatcher -[hidden]r-> IkkituukanMatcher
+}
+
+@enduml

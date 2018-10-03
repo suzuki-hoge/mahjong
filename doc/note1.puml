@@ -1,0 +1,20 @@
+@startuml
+
+interface Tile
+
+enum CharTile {
+  E, S, W, N\nWhite, Green, Red
+}
+
+class RankTile {
+  - int rank
+  - Mark
+}
+RankTile -u-|> Tile
+CharTile -u-|> Tile
+
+HandTiles -d-> "14" Tile
+HandTiles -r-> "*" Hand
+
+
+@enduml

@@ -1,0 +1,94 @@
+@startuml
+
+interface Tile {
+  + bool isJihai()
+  + bool isKazuhai()
+  + bool isYaotyuhai()
+}
+
+enum CharTile {
+  E, S, W, N\nWhite, Green, Red
+}
+
+class RankTile {
+  - Rank
+  - Color
+  + {static} RankTile $(int, Color)
+  + Rank asRank()
+  + Color asColor()
+}
+
+RankTile --|> Tile
+CharTile --|> Tile
+
+class HandTiles {
+  + HandTiles(Tile...)
+  + [Hand] judge()
+}
+
+interface GroupedHandTiles {
+  + [Hand] judge()
+}
+
+GroupedHandTiles -u-> Hand
+TitoituHandTiles -l-|> GroupedHandTiles
+NormalHandTiles -u-|> GroupedHandTiles
+NormalHandTiles -[hidden]u-> TitoituHandTiles
+
+NormalHandTiles -r-> "1" AllTiles
+
+HandTiles --> "*" GroupedHandTiles
+
+class Shuntu {
+  + [Rank] asRanks()
+  + Color asColor()
+  + bool same(Shuntu)
+  + bool sameRank(Shuntu)
+}
+
+class RankKoutu {
+  + bool sameRank(RankKoutu)
+  + Color asColor()
+}
+
+class RankToitu {
+  + Color asColor()
+}
+
+class CharKoutu {
+}
+
+class CharToitu {
+}
+
+class AllTiles {
+  + bool no(Tile -> bool)
+  + bool any(Tile -> bool)
+}
+
+NormalHandTiles --> "*" Shuntu
+NormalHandTiles --> "*" RankKoutu
+NormalHandTiles --> "*" CharKoutu
+NormalHandTiles --> "0..1" RankToitu
+NormalHandTiles --> "0..1" CharToitu
+TitoituHandTiles --> "1" AllTiles
+
+Shuntu --> "3" RankTile
+RankKoutu --> "3" RankTile
+CharKoutu --> "3" CharTile
+RankToitu -d-> "2" RankTile
+CharToitu -d-> "2" CharTile
+AllTiles --> "14" Tile
+
+enum Hand
+
+HandTiles -r-> "*" Hand
+
+class GroupedHandTilesFactory {
+  + [GroupedHandTiles] grouping(HandTiles)
+}
+
+HandTiles -l-> GroupedHandTilesFactory
+GroupedHandTilesFactory --> "*" GroupedHandTiles
+
+@enduml

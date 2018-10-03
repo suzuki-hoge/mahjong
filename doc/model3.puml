@@ -1,0 +1,35 @@
+@startuml
+
+class HandTiles {
+  + HandTiles(Tile...)
+  + [Hand] judge()
+}
+
+class GroupedHandTilesFactory {
+  + {static} [GroupedHandTiles] grouping(HandTiles)
+  - {static} [NormalHandTiles] normal(HandTiles)
+  - {static} <TitoituHandTiles> titoitu(HandTiles)
+}
+
+class TitoituHandTiles {
+}
+
+class NormalHandTiles {
+}
+
+class ToituFixedHandTiles {
+  + {static} [ToituFixedHandTiles] fixAll(HandTiles)
+  + <NormalHandTiles> grouping()
+}
+
+HandTiles -r-> GroupedHandTilesFactory
+
+GroupedHandTilesFactory --> "*" ToituFixedHandTiles
+ToituFixedHandTiles --> "0..1" NormalHandTiles
+GroupedHandTilesFactory --> "0..1" TitoituHandTiles
+
+interface Tile
+
+ToituFixedHandTiles -r-> "12" Tile
+
+@enduml

@@ -1,0 +1,62 @@
+@startuml
+
+class NormalGrouping {
+  - [Tile] all
+  - GroupedTiles g1, g2, g3, g4
+  + [Hand] judge()
+}
+
+interface GroupedTiles
+
+class Shuntu {
+  - 3 tiles
+}
+
+class Koutu {
+  - 3 tiles
+}
+
+class Jantou {
+  - 2 tiles
+}
+
+Shuntu -u-|> GroupedTiles
+Koutu -u-|> GroupedTiles
+Jantou -u-|> GroupedTiles
+
+NormalGrouping -d-> "4" GroupedTiles
+
+class IkkituuakanMatcher {
+  + bool isMatch(NormalGrouping) {\n  GroupedMatcher(handTiles).isMatch(g1, g2, g3, g4 -> g1 == [1, 2, 3] and g2 == [4, 5, 6]...)\n}
+}
+
+class HonituMatcher {
+  + bool isMatch(NormalGrouping) {\n  HandMatcher(handTiles).isMatch(all -> all.only(1 mark)\n}
+}
+
+class TinituMatcher {
+  + bool isMatch(NormalGrouping) {\n  HandMatcher(handTiles).isMatch(all -> all.no(no char-tiles) and HonituMatcher().isMatch(handTiles)) \n}
+}
+
+' composite?
+
+class HandMatcher {
+  + new(NormalGrouping)
+  + bool isMatch(NormalGrouping -> bool)
+}
+
+class GroupedMatcher {
+  + new(NormalGrouping)
+  + bool isMatch(GroupedTiles, GroupedTiles, GroupedTiles, GroupedTiles -> bool)
+}
+
+IkkituuakanMatcher -d-> GroupedMatcher : B.
+HonituMatcher -u-> HandMatcher : A.
+TinituMatcher --> HonituMatcher : C.
+TinituMatcher -l-> HandMatcher : A.
+
+NormalGrouping -r-> IkkituuakanMatcher
+NormalGrouping -l-> HonituMatcher
+NormalGrouping -u-> TinituMatcher
+
+@enduml
